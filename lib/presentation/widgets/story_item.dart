@@ -1,6 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
+import 'user_avatar.dart';
+
 class StoryItem extends StatelessWidget {
   final String? avatar;
   final String name;
@@ -18,11 +20,11 @@ class StoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarWidget = CircleAvatar(
+    final avatarWidget = UserAvatar(
+      avatar: avatar,
       radius: 32,
-      backgroundColor: isAdd ? Color(0xFF1E293B) : null,
-      backgroundImage: avatar != null ? NetworkImage(avatar!) : null,
-      child: isAdd ? Icon(Icons.add, size: 30, color: Colors.grey[700]) : null,
+      isAdd: isAdd,
+      isOnline: isOnline,
     );
     return GestureDetector(
       onTap: onTap,

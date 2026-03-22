@@ -12,22 +12,27 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> acceptFriendRequest(String userId) {
-    return remoteDataSource.acceptFriendRequest(userId);
+  Future<UserEntity> getUserById(String userId) {
+    return remoteDataSource.getUserById(userId);
   }
 
   @override
-  Future<void> deleteFriendRequest(String userId) {
-    return remoteDataSource.deleteFriendRequest(userId);
+  Future<List<UserEntity>> searchUsers(String query) {
+    return remoteDataSource.searchUsers(query);
   }
 
   @override
-  Stream<List<UserEntity>> getIncomingRequests() {
-    return remoteDataSource.getIncomingRequests();
+  Future<void> clearSearchHistory(String userId) {
+    return remoteDataSource.clearSearchHistory(userId);
   }
 
   @override
-  Future<void> sendFriendRequest(String userId) {
-    return remoteDataSource.sendFriendRequest(userId);
+  Future<List<String>> getSearchHistory(String userId) {
+    return remoteDataSource.getSearchHistory(userId);
+  }
+
+  @override
+  Future<void> saveSearchQuery(String userId, String query) {
+    return remoteDataSource.saveSearchQuery(userId, query);
   }
 }

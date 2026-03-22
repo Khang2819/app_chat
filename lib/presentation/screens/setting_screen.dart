@@ -8,6 +8,7 @@ import '../blocs/auth/auth_state.dart';
 import '../widgets/app_loader.dart';
 import '../widgets/app_snackbar.dart';
 import '../widgets/button.dart';
+import '../widgets/confirm_dialog.dart';
 import '../widgets/icon_button.dart';
 
 class Setting extends StatelessWidget {
@@ -29,12 +30,17 @@ class Setting extends StatelessWidget {
           listener: (context, state) {
             if (state is AuthLoading) {
               AppLoader.show(context);
-            } else {
-              AppLoader.hide(context);
+              return;
             }
+            if (!context.mounted) return;
+            AppLoader.hide(context);
+
             if (state is AuthSuces && state.message == 'Đăng xuất thành công') {
               AppSnackbar.show(context, message: state.message);
-              // context.go('/login'); // Quay về màn hình đăng nhập
+              context.go('/login');
+            }
+            if (state is AuthFailure) {
+              AppSnackbar.show(context, message: state.error);
             }
           },
           child: SafeArea(
@@ -130,6 +136,7 @@ class Setting extends StatelessWidget {
                               onPressed: () {
                                 context.push('/qr_screen');
                               },
+                              color: Color(0xFF1E5EFF),
                               icon: Icons.qr_code_scanner,
                             ),
                           ],
@@ -267,8 +274,17 @@ class Setting extends StatelessWidget {
                       Button(
                         text: 'Đăng xuất',
                         color: Color(0xFF1E5EFF),
-                        onPressed: () {
-                          context.read<AuthBloc>().add(Logout());
+                        onPressed: () async {
+                          final confirm = await showConfirmDialog(
+                            context: context,
+                            title: 'Xác nhận đăng xuất',
+                            content: 'Bạn có chắc chắn muốn đăng xuất không?',
+                          );
+
+                          if (confirm == true) {
+                            // ignore: use_build_context_synchronously
+                            context.read<AuthBloc>().add(Logout());
+                          }
                         },
                       ),
                     ],

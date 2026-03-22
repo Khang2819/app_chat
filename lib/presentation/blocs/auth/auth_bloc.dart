@@ -22,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await loginUseCase(event.email, event.password);
         emit(AuthSuces(message: 'Đăng nhập thành công'));
       } catch (e) {
-        emit(AuthInitial());
+        emit(AuthFailure(error: e.toString()));
       }
     });
     // đăng ký bằng email

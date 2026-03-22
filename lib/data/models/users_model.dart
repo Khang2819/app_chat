@@ -31,7 +31,7 @@ class UsersModel extends UserEntity {
     'email': email,
     'full_name': fullName,
     'avatar': avatar,
-    'is_online': isOnline,
+    'isOnline': isOnline,
     'username': userName,
     'last_seen': lastSeen,
   };

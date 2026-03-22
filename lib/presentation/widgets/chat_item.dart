@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'user_avatar.dart';
+
 class ChatItem extends StatelessWidget {
   final String name;
   final String message;
@@ -28,24 +30,12 @@ class ChatItem extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Stack(
         children: [
-          CircleAvatar(
+          UserAvatar(
+            avatar: avatar,
             radius: 28,
-            backgroundImage: avatar != null ? NetworkImage(avatar!) : null,
+            isOnline: isOnline,
+            isAdd: false,
           ),
-          if (isOnline)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                height: 16,
-                width: 16,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-              ),
-            ),
         ],
       ),
       title:

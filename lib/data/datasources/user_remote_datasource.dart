@@ -1,15 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../models/users_model.dart';
 
 abstract class UserRemoteDatasource {
   Stream<List<UserEntity>> getAllFrends();
-  Future<void> sendFriendRequest(String targetUserId);
-  Future<void> acceptFriendRequest(String requesterId);
-  Future<void> deleteFriendRequest(String requesterId);
-  Stream<List<UserEntity>> getIncomingRequests();
+  // Future<void> sendFriendRequest(String targetUserId);
+  // Future<void> acceptFriendRequest(String requesterId);
+  // Future<void> deleteFriendRequest(String requesterId);
+  // Stream<List<FriendRequestEntity>> getIncomingRequests();
+  Future<UserEntity> getUserById(String userId);
+  Future<List<UserEntity>> searchUsers(String query);
+  Future<List<String>> getSearchHistory(String userId);
+  Future<void> saveSearchQuery(String userId, String query);
+  Future<void> clearSearchHistory(String userId);
 }
 
 class UserRemoteDatasourceImpl extends UserRemoteDatasource {
@@ -17,113 +24,89 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Stream<List<UserEntity>> getAllFrends() {
-    final currentUserId = _auth.currentUser?.uid;
-    if (currentUserId == null) return Stream.value([]);
-    return _firestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('friends')
-        .snapshots()
-        .map((snapshot) {
-          final friends =
-              snapshot.docs
-                  .map((doc) => UsersModel.fromMap(doc.data()))
-                  .toList();
-          friends.sort((a, b) {
-            if (a.isOnline == b.isOnline) {
-              return 0;
-            }
-            return a.isOnline ? -1 : 1;
+    return _auth.authStateChanges().switchMap((user) {
+      if (user == null) return Stream.value(<UserEntity>[]);
+      return _firestore
+          .collection('users')
+          .doc(user.uid) // user.uid lấy từ Firebase Auth
+          .collection('friends')
+          .snapshots()
+          .map((snapshot) {
+            final friends =
+                snapshot.docs
+                    .map((doc) => UsersModel.fromMap(doc.data()))
+                    .toList();
+
+            friends.sort((a, b) {
+              if (a.isOnline == b.isOnline) return 0;
+              return a.isOnline ? -1 : 1;
+            });
+            return friends;
           });
-          return friends;
-        });
+    });
+    // final currentUserId = _auth.currentUser?.uid;
+    // if (currentUserId == null) return Stream.value([]);
+    // return _firestore
+    //     .collection('users')
+    //     .doc(currentUserId)
+    //     .collection('friends')
+    //     .snapshots()
+    //     .map((snapshot) {
+    //       final friends =
+    //           snapshot.docs
+    //               .map((doc) => UsersModel.fromMap(doc.data()))
+    //               .toList();
+    //       friends.sort((a, b) {
+    //         if (a.isOnline == b.isOnline) {
+    //           return 0;
+    //         }
+    //         return a.isOnline ? -1 : 1;
+    //       });
+    //       return friends;
+    //     });
   }
 
   @override
-  Future<void> sendFriendRequest(String targetUserId) async {
-    final currentUserId = _auth.currentUser?.uid;
-    if (currentUserId == null) return;
-    await _firestore
-        .collection('users')
-        .doc(targetUserId)
-        .collection('friend_requests')
-        .doc(currentUserId)
-        .set({
-          'fromId': currentUserId,
-          'status': 'pending',
-          'createdAt': FieldValue.serverTimestamp(),
-        });
+  Future<UserEntity> getUserById(String userId) async {
+    final doc = await _firestore.collection('users').doc(userId).get();
+    if (doc.exists && doc.data() != null) {
+      return UsersModel.fromMap(doc.data()!);
+    } else {
+      throw Exception("Người dùng không tồn tại");
+    }
   }
 
   @override
-  Future<void> acceptFriendRequest(String requesterId) async {
-    final currentUserId = _auth.currentUser?.uid;
-    if (currentUserId == null) return;
-    final batch = _firestore.batch();
-
-    final requesterDoc =
-        await _firestore.collection('users').doc(requesterId).get();
-    batch.set(
-      _firestore
-          .collection('users')
-          .doc(currentUserId)
-          .collection('friends')
-          .doc(requesterId),
-      requesterDoc.data()!,
-    );
-
-    final currentUserDoc =
-        await _firestore.collection('users').doc(currentUserId).get();
-    batch.set(
-      _firestore
-          .collection('users')
-          .doc(requesterId)
-          .collection('friends')
-          .doc(currentUserId),
-      currentUserDoc.data()!,
-    );
-
-    batch.delete(
-      _firestore
-          .collection('users')
-          .doc(currentUserId)
-          .collection('friend_requests')
-          .doc(requesterId),
-    );
-    await batch.commit();
+  Future<List<UserEntity>> searchUsers(String query) async {
+    final snapshot =
+        await _firestore
+            .collection('users')
+            .where('userName', isGreaterThanOrEqualTo: query)
+            .where('userName', isLessThanOrEqualTo: '$query\uf8ff')
+            .get();
+    return snapshot.docs.map((doc) => UsersModel.fromMap(doc.data())).toList();
   }
 
   @override
-  Future<void> deleteFriendRequest(String requesterId) async {
-    final currentUserId = _auth.currentUser?.uid;
-    await _firestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('friend_requests')
-        .doc(requesterId)
-        .delete();
+  Future<List<String>> getSearchHistory(String userId) async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getStringList('search_history_$userId') ?? [];
   }
 
   @override
-  Stream<List<UserEntity>> getIncomingRequests() {
-    final currentUserId = _auth.currentUser?.uid;
-    if (currentUserId == null) return Stream.value([]);
-    return _firestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('friend_requests')
-        .snapshots()
-        .asyncMap((snapshot) async {
-          List<UserEntity> requesters = [];
-          for (var doc in snapshot.docs) {
-            final fromId = doc.data()['fromId'];
-            final userDoc =
-                await _firestore.collection('users').doc(fromId).get();
-            if (userDoc.exists) {
-              requesters.add(UsersModel.fromMap(userDoc.data()!));
-            }
-          }
-          return requesters;
-        });
+  Future<void> saveSearchQuery(String userId, String query) async {
+    final pref = await SharedPreferences.getInstance();
+    final key = 'search_history_$userId';
+    List<String> history = pref.getStringList(key) ?? [];
+    history.remove(query);
+    history.insert(0, query);
+    if (history.length > 10) history = history.sublist(0, 10);
+    await pref.setStringList(key, history);
+  }
+
+  @override
+  Future<void> clearSearchHistory(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('search_history_$userId');
   }
 }

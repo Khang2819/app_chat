@@ -62,6 +62,10 @@ class Bottomnav extends StatelessWidget {
             label: 'Danh bạ',
           ),
           const BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Bạn bè',
+          ),
+          const BottomNavigationBarItem(
             icon: Icon(Icons.explore),
             label: 'Khám phá',
           ),

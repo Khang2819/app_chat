@@ -38,7 +38,10 @@ class Directory extends StatelessWidget {
                       ),
                     ),
                     CircleIconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push('/search');
+                      },
+                      color: Color(0xFF1E5EFF),
                       icon: Icons.person_add_alt_1_rounded,
                     ),
                   ],
@@ -60,64 +63,120 @@ class Directory extends StatelessWidget {
               Expanded(
                 child: Stack(
                   children: [
-                    ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      children: [
-                        ChatItem(
-                          name: 'Nguyễn Văn Khang',
-                          message: 'Xin chào, Thằng Loll nha?',
-                          time: '10:45',
-                          avatar:
-                              'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
-                          unreadCount: 2,
-                          isOnline: true,
-                          hasCheck: true,
-                          onTap: () {},
+                    CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 46,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0xFF1565C0),
+                                  ),
+                                  child: Icon(
+                                    Icons.group_add_rounded,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                Text(
+                                  'Tạo nhóm mới',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
+                        SliverToBoxAdapter(
+                          child: Divider(
+                            color: const Color(0xFF1C2742),
+                            height: 1,
+                            indent: 76,
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 46,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0xFF1565C0),
+                                  ),
+                                  child: Icon(
+                                    Icons.share,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                Text(
+                                  'Mời bạn bè',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate([
+                              ChatItem(
+                                name: 'Nguyễn Văn Khang',
+                                message: 'Xin chào, Thằng Loll nha?',
+                                time: '10:45',
+                                avatar:
+                                    'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
+                                unreadCount: 2,
+                                isOnline: true,
+                                hasCheck: true,
+                                onTap: () {},
+                              ),
 
-                        ChatItem(
-                          name: 'Nguyễn Văn Khang',
-                          message: 'Xin chào, Thằng Loll nha?',
-                          time: '10:45',
-                          avatar:
-                              'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
-                          unreadCount: 2,
-                          isOnline: true,
-                          hasCheck: true,
-                          onTap: () {},
-                        ),
-                        ChatItem(
-                          name: 'Nguyễn Văn Khang',
-                          message: 'Xin chào, Thằng Loll nha?',
-                          time: '10:45',
-                          avatar:
-                              'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
-                          unreadCount: 2,
-                          isOnline: true,
-                          hasCheck: true,
-                          onTap: () {},
-                        ),
-                        ChatItem(
-                          name: 'Nguyễn Văn Khang',
-                          message: 'Xin chào, Thằng Loll nha?',
-                          time: '10:45',
-                          avatar:
-                              'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
-                          unreadCount: 2,
-                          isOnline: true,
-                          hasCheck: true,
-                          onTap: () {},
-                        ),
-                        ChatItem(
-                          name: 'Nguyễn Văn Khang',
-                          message: 'Xin chào, Thằng Loll nha?',
-                          time: '10:45',
-                          avatar:
-                              'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
-                          unreadCount: 2,
-                          isOnline: true,
-                          hasCheck: true,
-                          onTap: () {},
+                              ChatItem(
+                                name: 'Nguyễn Văn Khang',
+                                message: 'Xin chào, Thằng Loll nha?',
+                                time: '10:45',
+                                avatar:
+                                    'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
+                                unreadCount: 2,
+                                isOnline: true,
+                                hasCheck: true,
+                                onTap: () {},
+                              ),
+                              ChatItem(
+                                name: 'Nguyễn Văn Khang',
+                                message: 'Xin chào, Thằng Loll nha?',
+                                time: '10:45',
+                                avatar:
+                                    'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/avartar-anime-6.jpg',
+                                unreadCount: 2,
+                                isOnline: true,
+                                hasCheck: true,
+                                onTap: () {},
+                              ),
+                            ]),
+                          ),
                         ),
                       ],
                     ),

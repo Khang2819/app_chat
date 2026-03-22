@@ -8,6 +8,8 @@ class SearchTextfield extends StatelessWidget {
   final bool readOnly;
   final bool autofocus;
   final bool canRequestFocus;
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
   const SearchTextfield({
     super.key,
     required this.icon,
@@ -17,6 +19,8 @@ class SearchTextfield extends StatelessWidget {
     this.autofocus = false,
     this.canRequestFocus = true,
     this.onTap,
+    this.onChanged,
+    this.onSubmitted,
   });
 
   @override
@@ -28,6 +32,8 @@ class SearchTextfield extends StatelessWidget {
       autofocus: autofocus,
       canRequestFocus: canRequestFocus,
       onTap: onTap,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
       decoration: InputDecoration(
         filled: true,
         fillColor: const Color(0xFF1A2233),

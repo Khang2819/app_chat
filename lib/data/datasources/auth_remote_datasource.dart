@@ -17,11 +17,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Stream<UsersModel?> get user {
     return _firebaseAuth.authStateChanges().asyncMap((firebaseUser) async {
-      if (firebaseUser == null) return null;
-      final doc =
+      if (firebaseUser == null) {
+        return null;
+      }
+      final userDoc =
           await _firestore.collection('users').doc(firebaseUser.uid).get();
-
-      return UsersModel.fromMap(doc.data()!);
+      return UsersModel.fromMap(userDoc.data()!);
     });
   }
 
@@ -54,7 +55,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         email: email,
         password: password,
       );
-      final userData = {'email': email, 'full_name': fullName};
+      final userData = {
+        'userId': userCredential.user!.uid,
+        'email': email,
+        'full_name': fullName,
+        'isOnline': true,
+        'userName': email.split('@')[0],
+      };
 
       await _firestore
           .collection('users')

@@ -7,6 +7,7 @@ class UserEntity extends Equatable {
   final String? avatar;
   final bool isOnline;
   final String userName;
+  final DateTime? requestAt;
   final DateTime? lastSeen;
   const UserEntity({
     required this.userId,
@@ -16,7 +17,15 @@ class UserEntity extends Equatable {
     required this.isOnline,
     required this.userName,
     this.lastSeen,
+    this.requestAt,
   });
   @override
-  List<Object?> get props => [userId, fullName, email, avatar, isOnline];
+  List<Object?> get props => [
+    userId,
+    fullName,
+    email,
+    avatar,
+    isOnline,
+    requestAt,
+  ];
 }

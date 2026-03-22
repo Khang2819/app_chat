@@ -5,7 +5,7 @@ import '../widgets/textfield.dart';
 
 class ChangePassword extends StatelessWidget {
   ChangePassword({super.key});
-  final TextEditingController passworrdController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -63,7 +63,7 @@ class ChangePassword extends StatelessWidget {
                         Textfield(
                           hint: 'Nhập mật khẩu cũ',
                           icon: Icons.lock,
-                          controller: passworrdController,
+                          controller: passwordController,
                           isPassword: true,
                         ),
                         const SizedBox(height: 10),
