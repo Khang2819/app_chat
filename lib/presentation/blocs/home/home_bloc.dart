@@ -9,33 +9,48 @@ import 'home_event.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final UserRepository userRepository;
   StreamSubscription? _friendsSubscription;
+
   HomeBloc({required this.userRepository}) : super(HomeInitial()) {
-    on<HomeLoad>((event, emit) async {
-      emit(HomeLoading());
-      await _friendsSubscription?.cancel();
-      // await emit.forEach<List<UserEntity>>(
-      //   userRepository.getAllFrends(),
-      //   onData: (user) => HomeLoaded(onlineUsers: user, chats: user),
-      //   onError: (error, _) => HomeError(error.toString()),
-      // );
-      _friendsSubscription = userRepository.getAllFrends().listen(
-        (users) => add(HomeUpdated(users)),
-        onError: (error) => add(HomeErrorOccurred(error.toString())),
-      );
-    });
+    on<HomeLoad>(_onHomeLoad);
+    on<HomeUpdated>(_onHomeUpdated);
+    on<HomeErrorOccurred>(_onHomeError);
+    on<HomeReset>(_onHomeReset);
+  }
 
-    on<HomeUpdated>((event, emit) {
-      emit(HomeLoaded(onlineUsers: event.users, chats: event.users));
-    });
+  Future<void> _onHomeLoad(HomeLoad event, Emitter<HomeState> emit) async {
+    emit(HomeLoading());
+    await _friendsSubscription?.cancel();
+    _friendsSubscription = null;
 
-    on<HomeErrorOccurred>((event, emit) {
-      emit(HomeError(event.error));
-    });
+    _friendsSubscription = userRepository.getAllFrends().listen(
+      (users) {
+        if (!isClosed) add(HomeUpdated(users));
+      },
+      onError: (error) {
+        if (!isClosed) add(HomeErrorOccurred(error.toString()));
+      },
+    );
+  }
+
+  void _onHomeUpdated(HomeUpdated event, Emitter<HomeState> emit) {
+    final onlineUsers = event.users.where((user) => user.isOnline).toList();
+    emit(HomeLoaded(onlineUsers: onlineUsers, chats: event.users));
+  }
+
+  void _onHomeError(HomeErrorOccurred event, Emitter<HomeState> emit) {
+    emit(HomeError(event.error));
+  }
+
+  Future<void> _onHomeReset(HomeReset event, Emitter<HomeState> emit) async {
+    await _friendsSubscription?.cancel();
+    _friendsSubscription = null;
+    emit(HomeInitial());
   }
 
   @override
-  Future<void> close() {
-    _friendsSubscription?.cancel(); // Quan trọng: Hủy stream khi bloc bị đóng
+  Future<void> close() async {
+    await _friendsSubscription?.cancel();
+    _friendsSubscription = null;
     return super.close();
   }
 }

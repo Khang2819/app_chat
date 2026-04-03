@@ -1,4 +1,4 @@
-import 'package:app_chat/domain/entities/user_entity.dart';
+import 'package:app_chat/domain/repositories/user_entity.dart';
 
 abstract class UserRepository {
   Stream<List<UserEntity>> getAllFrends();

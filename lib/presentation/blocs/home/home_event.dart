@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/user_entity.dart';
+import '../../../domain/repositories/user_entity.dart';
 
 sealed class HomeEvent extends Equatable {
   const HomeEvent();
@@ -9,6 +9,8 @@ sealed class HomeEvent extends Equatable {
 }
 
 class HomeLoad extends HomeEvent {}
+
+class HomeReset extends HomeEvent {}
 
 class HomeUpdated extends HomeEvent {
   final List<UserEntity> users;

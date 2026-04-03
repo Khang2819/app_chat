@@ -15,14 +15,24 @@ class FriendRequestModel extends FriendRequestEntity {
     Map<String, dynamic> userMap,
   ) {
     return FriendRequestModel(
-      fromId: map['fromId'] ?? '',
-      fullName: userMap['full_name'],
+      fromId: map['fromId'] as String? ?? '',
+      fullName: userMap['full_name'] as String? ?? '',
       createdAt:
           map['createdAt'] != null
               ? (map['createdAt'] as Timestamp).toDate()
               : DateTime.now(),
-      status: map['status'] ?? 'pending',
+      status: map['status'] as String? ?? 'pending',
       avatar: userMap['avatar'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'fromId': fromId,
+      'full_name': fullName,
+      'createdAt': createdAt,
+      'status': status,
+      'avatar': avatar,
+    };
   }
 }

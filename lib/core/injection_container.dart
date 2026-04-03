@@ -7,17 +7,22 @@ import 'package:app_chat/presentation/blocs/search/search_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../data/datasources/auth_remote_datasource.dart';
+import '../data/datasources/chat_remote_datasource.dart';
 import '../data/datasources/friend_remote_datasource.dart';
 import '../data/datasources/user_remote_datasource.dart';
 import '../data/repositories/auth_repository_impl.dart';
+import '../data/repositories/chat_repository_impl.dart';
 import '../data/repositories/friend_repository_impl.dart';
 import '../data/repositories/user_repository_impl.dart';
 import '../domain/repositories/auth_repository.dart';
+import '../domain/repositories/chat_repository.dart';
 import '../domain/repositories/user_repository.dart';
 import '../domain/usecases/auth_usecases/login_usecase.dart';
 import '../domain/usecases/auth_usecases/logout_usecase.dart';
 import '../domain/usecases/auth_usecases/register_usecase.dart';
+import '../domain/usecases/chat_usecases.dart';
 import '../domain/usecases/friend_usecases.dart';
+import '../presentation/blocs/chat/chat_bloc.dart';
 
 final getIt = GetIt.instance;
 void init() {
@@ -40,6 +45,9 @@ void init() {
     ),
   );
   getIt.registerFactory(() => MyQrBloc(userRepository: getIt()));
+  getIt.registerFactory(
+    () => ChatBloc(getChatUsecase: getIt(), sendChatUsecase: getIt()),
+  );
 
   //case
   getIt.registerLazySingleton(() => LoginUsecase(getIt()));
@@ -50,6 +58,8 @@ void init() {
   getIt.registerLazySingleton(() => DeleteFriendRequestUsecase(getIt()));
   getIt.registerLazySingleton(() => GetIncomingRequestsUsecase(getIt()));
   // getIt.registerLazySingleton(() => )
+  getIt.registerLazySingleton(() => GetChatUsecase(getIt()));
+  getIt.registerLazySingleton(() => SendChatUsecase(getIt()));
 
   //Repositories
   getIt.registerLazySingleton<AuthRepository>(
@@ -61,6 +71,9 @@ void init() {
   getIt.registerLazySingleton<FriendRepository>(
     () => FriendRepositoryImpl(getIt()),
   );
+  getIt.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(getIt()),
+  );
 
   //Data sources
   getIt.registerLazySingleton<AuthRemoteDataSource>(
@@ -71,5 +84,8 @@ void init() {
   );
   getIt.registerLazySingleton<FriendRemoteDatasource>(
     () => FriendRemoteDatasourceImpl(),
+  );
+  getIt.registerLazySingleton<ChatRemoteDatasource>(
+    () => ChatRemoteDatasourceImpl(),
   );
 }

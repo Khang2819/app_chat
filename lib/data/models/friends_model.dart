@@ -17,6 +17,7 @@ class FriendsModel extends FriendsEntity {
       userId: map['userId'] as String? ?? '',
       email: map['email'] as String? ?? '',
       fullName: map['full_name'] as String? ?? '',
+      avatar: map['avatar'] as String? ?? '',
       isOnline: map['isOnline'] as bool? ?? false,
       userName: map['userName'] as String? ?? '',
       lastSeen:
@@ -30,7 +31,7 @@ class FriendsModel extends FriendsEntity {
     'email': email,
     'full_name': fullName,
     'avatar': avatar,
-    'is_online': isOnline,
+    'isOnline': isOnline,
     'username': userName,
     'last_seen': lastSeen,
   };

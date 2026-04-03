@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/user_entity.dart';
+import '../../../domain/repositories/user_entity.dart';
 
 sealed class HomeState extends Equatable {
   const HomeState();
@@ -17,12 +17,12 @@ class HomeLoaded extends HomeState {
   final List<UserEntity> chats;
   const HomeLoaded({this.onlineUsers = const [], this.chats = const []});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [onlineUsers, chats];
 }
 
 class HomeError extends HomeState {
   final String message;
   const HomeError(this.message);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [message];
 }

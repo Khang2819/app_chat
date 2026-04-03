@@ -3,15 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../domain/entities/user_entity.dart';
+import '../../domain/repositories/user_entity.dart';
 import '../models/users_model.dart';
 
 abstract class UserRemoteDatasource {
   Stream<List<UserEntity>> getAllFrends();
-  // Future<void> sendFriendRequest(String targetUserId);
-  // Future<void> acceptFriendRequest(String requesterId);
-  // Future<void> deleteFriendRequest(String requesterId);
-  // Stream<List<FriendRequestEntity>> getIncomingRequests();
   Future<UserEntity> getUserById(String userId);
   Future<List<UserEntity>> searchUsers(String query);
   Future<List<String>> getSearchHistory(String userId);
@@ -28,7 +24,7 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
       if (user == null) return Stream.value(<UserEntity>[]);
       return _firestore
           .collection('users')
-          .doc(user.uid) // user.uid lấy từ Firebase Auth
+          .doc(user.uid)
           .collection('friends')
           .snapshots()
           .map((snapshot) {
@@ -44,26 +40,6 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
             return friends;
           });
     });
-    // final currentUserId = _auth.currentUser?.uid;
-    // if (currentUserId == null) return Stream.value([]);
-    // return _firestore
-    //     .collection('users')
-    //     .doc(currentUserId)
-    //     .collection('friends')
-    //     .snapshots()
-    //     .map((snapshot) {
-    //       final friends =
-    //           snapshot.docs
-    //               .map((doc) => UsersModel.fromMap(doc.data()))
-    //               .toList();
-    //       friends.sort((a, b) {
-    //         if (a.isOnline == b.isOnline) {
-    //           return 0;
-    //         }
-    //         return a.isOnline ? -1 : 1;
-    //       });
-    //       return friends;
-    //     });
   }
 
   @override

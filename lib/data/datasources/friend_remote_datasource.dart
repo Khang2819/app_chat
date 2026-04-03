@@ -83,8 +83,6 @@ class FriendRemoteDatasourceImpl extends FriendRemoteDatasource {
 
   @override
   Stream<List<FriendRequestEntity>> getIncomingRequests() {
-    // final currentUserId = _auth.currentUser?.uid;
-    // if (currentUserId == null) return Stream.value([]);
     return _auth.authStateChanges().switchMap((user) {
       if (user == null) return Stream.value(<FriendRequestEntity>[]);
       return _firestore
