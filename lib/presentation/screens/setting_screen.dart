@@ -1,4 +1,5 @@
 import 'package:app_chat/presentation/blocs/auth/auth_event.dart';
+import 'package:app_chat/presentation/blocs/my_qr/my_qr_bloc.dart'; // Import MyQrBloc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +21,7 @@ class Setting extends StatelessWidget {
       child: Scaffold(
         body: Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topLeft,
@@ -33,24 +34,26 @@ class Setting extends StatelessWidget {
                 AppLoader.show(context);
                 return;
               }
-
               AppLoader.hide(context);
 
               if (state is AuthSuces &&
                   state.message == 'Đăng xuất thành công') {
                 AppSnackbar.show(context, message: state.message);
-                // Dùng go thay vì push để xóa toàn bộ stack
                 context.go('/login');
               } else if (state is AuthFailure) {
-                AppSnackbar.show(context, message: state.error);
+                AppSnackbar.show(
+                  context,
+                  message: state.error,
+                  type: SnackbarType.error,
+                );
               }
             },
             child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Text(
                       'Cài đặt',
                       style: TextStyle(
@@ -60,234 +63,140 @@ class Setting extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
                   Expanded(
                     child: ListView(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       children: [
-                        Container(
-                          height: 100,
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 0.2),
-                            borderRadius: BorderRadius.circular(25),
-                            color: Color(0xFF1C232E),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
+                        BlocBuilder<MyQrBloc, MyQrState>(
+                          builder: (context, state) {
+                            String fullName = "Đang tải...";
+                            String userName = "@...";
+                            String? avatarUrl;
+
+                            if (state is MyQrLoaded) {
+                              fullName = state.user.fullName;
+                              userName = "@${state.user.userName}";
+                              avatarUrl = state.user.avatar;
+                            }
+
+                            return Container(
+                              height: 100,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white10,
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(25),
+                                color: const Color(0xFF1C232E),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Stack(
+                                  Row(
                                     children: [
-                                      Stack(
+                                      CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage:
+                                            avatarUrl != null &&
+                                                    avatarUrl.isNotEmpty
+                                                ? NetworkImage(avatarUrl)
+                                                : const NetworkImage(
+                                                  'https://via.placeholder.com/150',
+                                                ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          CircleAvatar(
-                                            radius: 30,
-                                            backgroundImage: NetworkImage(
-                                              'https://jbagy.me/wp-content/uploads/2025/03/Hinh-anh-avatar-nam-anime-7.jpg',
+                                          Text(
+                                            fullName,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          Positioned(
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              height: 20,
-                                              width: 20,
-                                              decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2,
-                                                ),
-                                              ),
+                                          Text(
+                                            userName,
+                                            style: const TextStyle(
+                                              color: Colors.white54,
+                                              fontSize: 14,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(vertical: 16),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Nguyễn Văn Khang',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 1),
-                                        Text(
-                                          '@khang_2819',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
+                                  CircleIconButton(
+                                    onPressed: () => context.push('/qr_screen'),
+                                    color: const Color(0xFF1E5EFF),
+                                    icon: Icons.qr_code_scanner,
                                   ),
                                 ],
                               ),
-                              CircleIconButton(
-                                onPressed: () {
-                                  context.push('/qr_screen');
-                                },
-                                color: Color(0xFF1E5EFF),
-                                icon: Icons.qr_code_scanner,
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'TÀI KHOẢN & BẢO VỆ',
+                        const SizedBox(height: 25),
+                        const Text(
+                          'TÀI KHOẢN & BẢO MẬT',
                           style: TextStyle(
-                            color: Color(0xFF5D675F),
+                            color: Colors.white38,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            border: Border.all(color: Colors.grey, width: 0.2),
-                            color: Color(0xFF1C232E),
-                          ),
-                          child: Column(
-                            children: [
-                              ListTile(
-                                leading: Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    // ignore: deprecated_member_use
-                                    color: Colors.blue.withOpacity(0.15),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.person_outline,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                title: const Text(
-                                  'Tài khoản',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                subtitle: const Text(
-                                  'Bảo mật, đổi mật khẩu',
-                                  style: TextStyle(color: Colors.white54),
-                                ),
-                                trailing: const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.white38,
-                                ),
-                                onTap: () {},
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 72),
-                                child: Divider(
-                                  height: 1,
-                                  thickness: 0.5,
-                                  color: Colors.white12,
-                                ),
-                              ),
-                              ListTile(
-                                leading: Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    // ignore: deprecated_member_use
-                                    color: Colors.blue.withOpacity(0.15),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.person_outline,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                title: const Text(
-                                  'Tài khoản',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                subtitle: const Text(
-                                  'Bảo mật, đổi mật khẩu',
-                                  style: TextStyle(color: Colors.white54),
-                                ),
-                                trailing: const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.white38,
-                                ),
-                                onTap: () {},
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 72),
-                                child: Divider(
-                                  height: 1,
-                                  thickness: 0.5,
-                                  color: Colors.white12,
-                                ),
-                              ),
-                              ListTile(
-                                leading: Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    // ignore: deprecated_member_use
-                                    color: Colors.blue.withOpacity(0.15),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.person_outline,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                title: const Text(
-                                  'Tài khoản',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                subtitle: const Text(
-                                  'Bảo mật, đổi mật khẩu',
-                                  style: TextStyle(color: Colors.white54),
-                                ),
-                                trailing: const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.white38,
-                                ),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'PREFERENCES',
-                          style: TextStyle(
-                            color: Color(0xFF5D675F),
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
                           ),
                         ),
                         const SizedBox(height: 10),
+                        _buildSettingGroup([
+                          _buildListTile(
+                            icon: Icons.lock_outline,
+                            title: 'Đổi mật khẩu',
+                            subtitle: 'Thay đổi mật khẩu định kỳ',
+                            onTap: () => context.push('/change_password'),
+                          ),
+                          _buildListTile(
+                            icon: Icons.notifications_none,
+                            title: 'Thông báo',
+                            subtitle: 'Âm thanh, tin nhắn',
+                            onTap: () {},
+                          ),
+                        ]),
+                        const SizedBox(height: 25),
+                        const Text(
+                          'KHÁC',
+                          style: TextStyle(
+                            color: Colors.white38,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _buildSettingGroup([
+                          _buildListTile(
+                            icon: Icons.help_outline,
+                            title: 'Hỗ trợ',
+                            subtitle: 'Trung tâm trợ giúp',
+                            onTap: () {},
+                          ),
+                        ]),
+                        const SizedBox(height: 30),
                         Button(
                           text: 'Đăng xuất',
-                          color: Color(0xFF1E5EFF),
+                          color: const Color(0xFF1E5EFF),
                           onPressed: () async {
                             final confirm = await showConfirmDialog(
                               context: context,
-                              title: 'Xác nhận đăng xuất',
-                              content: 'Bạn có chắc chắn muốn đăng xuất không?',
+                              title: 'Xác nhận',
+                              content: 'Bạn có chắc chắn muốn đăng xuất?',
                             );
-
-                            if (confirm == true) {
-                              // ignore: use_build_context_synchronously
-                              print("abc 1111");
-                              if (!context.mounted) return;
+                            if (confirm == true && context.mounted) {
                               context.read<AuthBloc>().add(Logout());
                             }
                           },
@@ -301,6 +210,47 @@ class Setting extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // Widget bổ trợ để gom nhóm các mục cài đặt
+  Widget _buildSettingGroup(List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        color: const Color(0xFF1C232E),
+        border: Border.all(color: Colors.white10, width: 0.5),
+      ),
+      child: Column(children: children),
+    );
+  }
+
+  Widget _buildListTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.blue, size: 20),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: const TextStyle(color: Colors.white54, fontSize: 12),
+      ),
+      trailing: const Icon(Icons.chevron_right, color: Colors.white24),
+      onTap: onTap,
     );
   }
 }

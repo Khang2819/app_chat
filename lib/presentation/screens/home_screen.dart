@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../blocs/home/home_bloc.dart';
+import '../blocs/home/home_event.dart';
 import '../blocs/home/home_state.dart';
 import '../widgets/chat_item.dart';
 import '../widgets/search_textfield.dart';
@@ -261,6 +262,34 @@ class Home extends StatelessWidget {
                         ),
                       ),
                     ],
+                  );
+                }
+                if (state is HomeError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 48,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Lỗi: ${state.message}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        TextButton(
+                          onPressed:
+                              () => context.read<HomeBloc>().add(HomeLoad()),
+                          child: const Text("Thử lại"),
+                        ),
+                      ],
+                    ),
                   );
                 }
                 return const Center(

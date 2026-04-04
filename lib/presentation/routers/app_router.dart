@@ -21,28 +21,12 @@ import '../screens/user_info_screen.dart';
 class AppRouter {
   static final router = GoRouter(
     initialLocation: '/splash',
-    // redirect: (context, state) {
-    //   final currentUser = FirebaseAuth.instance.currentUser;
-    //   final bool loggingIn = state.matchedLocation == '/login';
-    //   final bool registering = state.matchedLocation == '/register';
-    //   final bool splash = state.matchedLocation == '/splash';
-    //   if (currentUser == null) {
-    //     return (loggingIn || registering || splash) ? null : '/login';
-    //   }
-
-    //   // Nếu đã đăng nhập mà cố vào trang login/register, đẩy về main
-    //   if (currentUser != null && (loggingIn || registering)) {
-    //     return '/mainScreen';
-    //   }
-    //   return null;
-    // },
     routes: [
       GoRoute(path: '/splash', builder: (context, state) => SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
       GoRoute(path: '/register', builder: (context, state) => Register()),
       GoRoute(path: '/forgot', builder: (context, state) => ForgotPassword()),
       GoRoute(path: '/mainScreen', builder: (context, state) => Mainscreen()),
-      // GoRoute(path: '/chat', builder: (context, state) => Chats()),
       GoRoute(path: '/directory', builder: (context, state) => Directory()),
       GoRoute(path: '/setting', builder: (context, state) => Setting()),
       GoRoute(path: '/story', builder: (context, state) => StoryScreen()),

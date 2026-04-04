@@ -33,6 +33,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         email: email,
         password: password,
       );
+      await _firestore.collection('users').doc(userCredential.user!.uid).update(
+        {'isOnline': true},
+      );
       final userDoc =
           await _firestore
               .collection('users')
@@ -75,8 +78,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> logout() async {
+    final uid = _firebaseAuth.currentUser?.uid;
     try {
       await _firebaseAuth.signOut();
+      if (uid != null) {
+        await _firestore.collection('users').doc(uid).update({
+          'isOnline': false,
+        });
+      }
     } catch (e) {
       throw Exception('Đã có lỗi xảy ra, vui long thử lại');
     }

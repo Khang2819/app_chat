@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/button.dart';
 import '../widgets/textfield.dart';
@@ -38,7 +39,7 @@ class ChangePassword extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () => context.pop(),
                           icon: Icon(
                             Icons.arrow_back,
                             color: Colors.white,

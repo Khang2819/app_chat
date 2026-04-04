@@ -12,13 +12,13 @@ class QrScanScreen extends StatefulWidget {
 class _QrScanScreenState extends State<QrScanScreen> {
   final MobileScannerController cameraController = MobileScannerController(
     cameraResolution: const Size(1280, 720),
-    detectionSpeed: DetectionSpeed.normal,
+    detectionSpeed: DetectionSpeed.noDuplicates,
     detectionTimeoutMs: 500,
     formats: [BarcodeFormat.qrCode],
     returnImage: false,
     torchEnabled: false,
     invertImage: false,
-    autoZoom: true,
+    autoZoom: false,
   );
   bool isScanned = false;
   bool isTorchOn = false;
@@ -45,7 +45,8 @@ class _QrScanScreenState extends State<QrScanScreen> {
                   isScanned = true;
                 });
                 final String scannedUid = barcodes.first.rawValue ?? 'UnKnow';
-                context.go('/userinfo', extra: scannedUid);
+                cameraController.stop();
+                context.push('/userinfo', extra: scannedUid);
               }
             },
           ),

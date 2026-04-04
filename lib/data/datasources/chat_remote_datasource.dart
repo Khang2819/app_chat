@@ -58,7 +58,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
 
   @override
   Future<void> setTyping(String roomId, String userId, bool isTyping) async {
-    final roomRef = _firestore.collection('chat_rooms').doc(roomId);
+    final roomRef = _firestore.collection('chat_room').doc(roomId);
 
     if (isTyping) {
       await roomRef.set({

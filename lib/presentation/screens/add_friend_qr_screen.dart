@@ -251,7 +251,33 @@ class AddFriendQrScreen extends StatelessWidget {
               ),
             );
           }
-          return const Center(child: Text("Lỗi tải dữ liệu"));
+          if (state is MyQrError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Lỗi: ${state.message}",
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  TextButton(
+                    onPressed:
+                        () => context.read<MyQrBloc>().add(LoadMyQrInfo()),
+                    child: const Text("Thử lại"),
+                  ),
+                ],
+              ),
+            );
+          }
+          return const Center(
+            child: Text(
+              "Đang khởi tạo...",
+              style: TextStyle(color: Colors.white),
+            ),
+          );
         },
       ),
     );

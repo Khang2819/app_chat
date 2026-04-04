@@ -1,6 +1,7 @@
 import 'package:app_chat/core/injection_container.dart';
 import 'package:app_chat/presentation/blocs/home/home_bloc.dart';
 import 'package:app_chat/presentation/blocs/home/home_event.dart';
+import 'package:app_chat/presentation/blocs/my_qr/my_qr_bloc.dart';
 import 'package:app_chat/presentation/blocs/search/search_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => getIt<HomeBloc>()..add(HomeLoad())),
         BlocProvider(create: (_) => getIt<SearchBloc>()),
         BlocProvider(create: (_) => getIt<FriendBloc>()),
+        BlocProvider(create: (_) => getIt<MyQrBloc>()..add(LoadMyQrInfo())),
       ],
       child: MyApp(),
     ),

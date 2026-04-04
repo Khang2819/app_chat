@@ -57,7 +57,6 @@ void init() {
   getIt.registerLazySingleton(() => AcceptFriendRequestUsecase(getIt()));
   getIt.registerLazySingleton(() => DeleteFriendRequestUsecase(getIt()));
   getIt.registerLazySingleton(() => GetIncomingRequestsUsecase(getIt()));
-  // getIt.registerLazySingleton(() => )
   getIt.registerLazySingleton(() => GetChatUsecase(getIt()));
   getIt.registerLazySingleton(() => SendChatUsecase(getIt()));
 

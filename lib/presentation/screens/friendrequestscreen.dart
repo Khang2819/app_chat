@@ -1,7 +1,6 @@
 import 'package:app_chat/domain/entities/friend_request_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/date_utils.dart';
 import '../blocs/friend/friend_bloc.dart';
 
@@ -16,7 +15,6 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
   @override
   void initState() {
     super.initState();
-    // Kích hoạt load dữ liệu khi vào màn hình
     context.read<FriendBloc>().add(LoadIncomingRequests());
   }
 
@@ -26,15 +24,14 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
       backgroundColor: const Color(0xFF101622),
       appBar: AppBar(
         elevation: 0,
-        centerTitle: true,
         backgroundColor: const Color(0xFF101622),
         title: const Text(
           'Lời mời kết bạn',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+          ),
         ),
       ),
       body: BlocBuilder<FriendBloc, FriendState>(
@@ -42,13 +39,10 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
           if (state is FriendLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           List<FriendRequestEntity> requests = [];
           if (state is FriendRequestLoaded) {
             requests = state.incomingRequests;
           }
-
-          // Phân loại lời mời theo thời gian
           final todayRequests =
               requests.where((u) => DateHelper.isToday(u.createdAt)).toList();
           final olderRequests =
@@ -56,15 +50,12 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
 
           return CustomScrollView(
             slivers: [
-              // Header luôn luôn hiển thị
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: _buildHeaderWidgets(requests.length),
                 ),
               ),
-
-              // Trường hợp không có lời mời nào
               if (requests.isEmpty)
                 const SliverFillRemaining(
                   hasScrollBody: false,
@@ -88,7 +79,6 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
                   ),
                 )
               else ...[
-                // Hiển thị lời mời hôm nay nếu có
                 if (todayRequests.isNotEmpty) ...[
                   const SliverToBoxAdapter(
                     child: Padding(
