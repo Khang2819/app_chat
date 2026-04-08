@@ -1,3 +1,5 @@
+import 'package:app_chat/presentation/widgets/app_snackbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -12,7 +14,7 @@ class QrScanScreen extends StatefulWidget {
 class _QrScanScreenState extends State<QrScanScreen> {
   final MobileScannerController cameraController = MobileScannerController(
     cameraResolution: const Size(1280, 720),
-    detectionSpeed: DetectionSpeed.noDuplicates,
+    detectionSpeed: DetectionSpeed.normal,
     detectionTimeoutMs: 500,
     formats: [BarcodeFormat.qrCode],
     returnImage: false,
@@ -39,14 +41,44 @@ class _QrScanScreenState extends State<QrScanScreen> {
             controller: cameraController,
             onDetect: (capture) {
               if (isScanned) return;
+
               final List<Barcode> barcodes = capture.barcodes;
               if (barcodes.isNotEmpty) {
+                final String scannedUid = barcodes.first.rawValue ?? '';
+                final String currentUserId =
+                    FirebaseAuth.instance.currentUser?.uid ?? '';
+
+                // 1. Kiểm tra nếu quét trúng mã của chính mình
+                if (scannedUid == currentUserId) {
+                  AppSnackbar.show(
+                    context,
+                    message: "Đây là mã QR của bạn!",
+                    type: SnackbarType.info,
+                  );
+                  return; // Không chuyển trang
+                }
+
+                // 2. Nếu là mã hợp lệ, thực hiện điều hướng
                 setState(() {
                   isScanned = true;
                 });
-                final String scannedUid = barcodes.first.rawValue ?? 'UnKnow';
+
                 cameraController.stop();
-                context.push('/userinfo', extra: scannedUid);
+
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  if (mounted) {
+                    // Đợi kết quả trả về từ màn hình userinfo
+                    await context.push('/userinfo', extra: scannedUid);
+
+                    // 3. QUAN TRỌNG: Reset trạng thái khi quay lại để có thể quét mã khác
+                    if (mounted) {
+                      setState(() {
+                        isScanned = false;
+                      });
+                      cameraController.start();
+                    }
+                  }
+                });
               }
             },
           ),

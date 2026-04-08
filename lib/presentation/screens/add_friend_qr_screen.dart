@@ -106,6 +106,7 @@ class AddFriendQrScreen extends StatelessWidget {
                                   // ignore: deprecated_member_use
                                   foregroundColor: const Color(0xFF0A1929),
                                   gapless: false,
+                                  errorCorrectionLevel: QrErrorCorrectLevel.H,
                                 ),
                                 Container(
                                   width: 50,

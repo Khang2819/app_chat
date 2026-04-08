@@ -7,6 +7,8 @@ class Bottomnav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int countnotifications = 8;
+    final int countMessenger = 10;
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF101622),
@@ -29,31 +31,11 @@ class Bottomnav extends StatelessWidget {
         elevation: 0,
         items: [
           BottomNavigationBarItem(
-            icon: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const Icon(Icons.messenger),
-                Positioned(
-                  right: -6,
-                  top: -4,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 18,
-                      minHeight: 18,
-                    ),
-                    child: const Text(
-                      '9+',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
+            icon: Badge(
+              isLabelVisible: countMessenger > 0,
+              backgroundColor: Colors.red,
+              label: Text(countMessenger > 9 ? '+9' : '$countMessenger'),
+              child: Icon(Icons.messenger),
             ),
             label: 'Tin nhắn',
           ),
@@ -61,9 +43,16 @@ class Bottomnav extends StatelessWidget {
             icon: Icon(Icons.contacts_rounded),
             label: 'Danh bạ',
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Bạn bè',
+          BottomNavigationBarItem(
+            icon: Badge(
+              backgroundColor: Colors.red,
+              isLabelVisible: countnotifications > 0,
+              label: Text(
+                countnotifications > 9 ? '+9' : '$countnotifications',
+              ),
+              child: const Icon(Icons.notifications),
+            ),
+            label: 'Thông báo',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.explore),
