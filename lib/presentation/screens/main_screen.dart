@@ -3,7 +3,9 @@ import 'package:app_chat/presentation/screens/friendrequestscreen.dart';
 import 'package:app_chat/presentation/screens/home_screen.dart';
 import 'package:app_chat/presentation/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../cubits/cubit/bottom_nav_cubit.dart';
 import '../widgets/bottomnav.dart';
 import 'story_screen.dart';
 
@@ -15,7 +17,6 @@ class Mainscreen extends StatefulWidget {
 }
 
 class _MainscreenState extends State<Mainscreen> {
-  int index = 0;
   final List<Widget> _pages = [
     Home(),
     Directory(),
@@ -25,14 +26,19 @@ class _MainscreenState extends State<Mainscreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[index],
-      bottomNavigationBar: Bottomnav(
-        currentIndex: index,
-        onTap: (newIndex) {
-          setState(() {
-            index = newIndex;
-          });
+    return BlocProvider(
+      create: (context) => BottomNavCubit(),
+      child: BlocBuilder<BottomNavCubit, int>(
+        builder: (context, state) {
+          return Scaffold(
+            body: _pages[state],
+            bottomNavigationBar: Bottomnav(
+              currentIndex: state,
+              onTap: (newIndex) {
+                context.read<BottomNavCubit>().changeTab(newIndex);
+              },
+            ),
+          );
         },
       ),
     );
