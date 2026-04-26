@@ -5,7 +5,7 @@ import 'package:app_chat/presentation/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubits/cubit/bottom_nav_cubit.dart';
+import '../cubits/nav/bottom_nav_cubit.dart';
 import '../widgets/bottomnav.dart';
 import 'story_screen.dart';
 

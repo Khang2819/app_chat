@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../domain/repositories/user_entity.dart';
+
 sealed class AuthState extends Equatable {
   const AuthState();
   @override
@@ -23,3 +25,13 @@ final class AuthFailure extends AuthState {
   @override
   List<Object?> get props => [error];
 }
+
+final class AuthAuthenticated extends AuthState {
+  final UserEntity user;
+  const AuthAuthenticated(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+final class AuthUnauthenticated extends AuthState {}

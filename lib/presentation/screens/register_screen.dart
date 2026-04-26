@@ -1,12 +1,10 @@
-import 'package:app_chat/presentation/blocs/auth/auth_bloc.dart';
-import 'package:app_chat/presentation/blocs/auth/auth_event.dart';
 import 'package:app_chat/presentation/widgets/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-import '../blocs/auth/auth_state.dart';
+import '../cubits/RegisterCubit/register_cubit.dart';
 import '../widgets/app_snackbar.dart';
 import '../widgets/button.dart';
 import '../widgets/button_outline.dart';
@@ -25,21 +23,21 @@ class Register extends StatelessWidget {
     return AppLoader.wrap(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: BlocListener<AuthBloc, AuthState>(
+        child: BlocListener<RegisterCubit, RegisterCubitState>(
           listener: (context, state) {
-            if (state is AuthLoading) {
+            if (state is RegisterLoading) {
               AppLoader.show(context);
             } else {
               AppLoader.hide(context);
             }
-            if (state is AuthSuces) {
+            if (state is RegisterSuccess) {
               AppSnackbar.show(
                 context,
                 message: "Đăng ký thành công",
                 type: SnackbarType.success,
               );
               context.go('/login');
-            } else if (state is AuthFailure) {
+            } else if (state is RegisterFailure) {
               AppSnackbar.show(
                 context,
                 message: 'Đăng kí không thành công',
@@ -71,7 +69,7 @@ class Register extends StatelessWidget {
                           size: 30,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Tạo tài khoản',
                         style: TextStyle(
                           fontSize: 32,
@@ -79,12 +77,12 @@ class Register extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Kết nối với bạn bè ngay lập tức. Tham gia cộng đồng ngay hôm nay!',
                         style: TextStyle(color: Colors.white70, fontSize: 17),
                       ),
                       const SizedBox(height: 15),
-                      Text(
+                      const Text(
                         'Tên đầy đủ',
                         style: TextStyle(fontSize: 15, color: Colors.white54),
                       ),
@@ -95,7 +93,7 @@ class Register extends StatelessWidget {
                         controller: fullNameController,
                       ),
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         'Email',
                         style: TextStyle(fontSize: 15, color: Colors.white54),
                       ),
@@ -106,7 +104,7 @@ class Register extends StatelessWidget {
                         controller: emailController,
                       ),
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         'Mật khẩu',
                         style: TextStyle(fontSize: 15, color: Colors.white54),
                       ),
@@ -118,7 +116,7 @@ class Register extends StatelessWidget {
                         isPassword: true,
                       ),
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         'Xác nhận mật khẩu',
                         style: TextStyle(fontSize: 15, color: Colors.white54),
                       ),
@@ -134,13 +132,10 @@ class Register extends StatelessWidget {
                         text: 'Đăng kí',
                         color: Color(0xFF1E5EFF),
                         onPressed: () {
-                          context.read<AuthBloc>().add(
-                            RegisterWithEmailEvent(
-                              fullName: fullNameController.text.trim(),
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                              confirmPassword: comfirmController.text.trim(),
-                            ),
+                          context.read<RegisterCubit>().register(
+                            fullNameController.text.trim(),
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
                           );
                         },
                       ),
@@ -152,7 +147,7 @@ class Register extends StatelessWidget {
                             child: Divider(thickness: 1, color: Colors.white24),
                           ),
                           const SizedBox(width: 10),
-                          Text(
+                          const Text(
                             'Hoặc tiếp tục với',
                             style: TextStyle(color: Colors.white54),
                           ),

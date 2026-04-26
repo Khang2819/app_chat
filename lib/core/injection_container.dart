@@ -23,17 +23,17 @@ import '../domain/usecases/auth_usecases/register_usecase.dart';
 import '../domain/usecases/chat_usecases.dart';
 import '../domain/usecases/friend_usecases.dart';
 import '../presentation/blocs/chat/chat_bloc.dart';
+import '../presentation/cubits/LoginCubit/login_cubit.dart';
+import '../presentation/cubits/RegisterCubit/register_cubit.dart';
 
 final getIt = GetIt.instance;
 void init() {
   // bloc
   getIt.registerFactory(
-    () => AuthBloc(
-      loginUseCase: getIt(),
-      registerUsecase: getIt(),
-      logoutUsecase: getIt(),
-    ),
+    () => AuthBloc(logoutUsecase: getIt(), authRepository: getIt()),
   );
+  getIt.registerFactory(() => LoginCubit(loginUseCase: getIt()));
+  getIt.registerFactory(() => RegisterCubit(registerUseCase: getIt()));
   getIt.registerFactory(() => SearchBloc(userRepository: getIt()));
   getIt.registerFactory(() => HomeBloc(userRepository: getIt()));
   getIt.registerFactory(

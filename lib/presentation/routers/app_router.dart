@@ -1,4 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/repositories/user_entity.dart';
@@ -21,6 +22,19 @@ import '../screens/user_info_screen.dart';
 class AppRouter {
   static final router = GoRouter(
     initialLocation: '/splash',
+    redirect: (context, state) {
+      final user = FirebaseAuth.instance.currentUser;
+      final isLogin = user != null;
+      final isGoingToLogin = state.matchedLocation == '/login';
+      if (!isLogin && !isGoingToLogin) {
+        return '/login';
+      }
+
+      if (isLogin && isGoingToLogin) {
+        return '/home';
+      }
+      return null;
+    },
     routes: [
       GoRoute(path: '/splash', builder: (context, state) => SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),

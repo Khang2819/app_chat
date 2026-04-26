@@ -48,17 +48,15 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 final String currentUserId =
                     FirebaseAuth.instance.currentUser?.uid ?? '';
 
-                // 1. Kiểm tra nếu quét trúng mã của chính mình
                 if (scannedUid == currentUserId) {
                   AppSnackbar.show(
                     context,
                     message: "Đây là mã QR của bạn!",
                     type: SnackbarType.info,
                   );
-                  return; // Không chuyển trang
+                  return;
                 }
 
-                // 2. Nếu là mã hợp lệ, thực hiện điều hướng
                 setState(() {
                   isScanned = true;
                 });

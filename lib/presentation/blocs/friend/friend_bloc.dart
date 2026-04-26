@@ -68,11 +68,6 @@ class FriendBloc extends Bloc<FriendEvent, FriendState> {
     LoadIncomingRequests event,
     Emitter<FriendState> emit,
   ) async {
-    // await emit.forEach<List<FriendRequestEntity>>(
-    //   getIncomingRequestsUsecase(),
-    //   onData: (requests) => FriendRequestLoaded(requests),
-    //   onError: (error, _) => FriendError(error.toString()),
-    // );
     await _requestsSubscription?.cancel();
     await emit.forEach<List<FriendRequestEntity>>(
       getIncomingRequestsUsecase(),

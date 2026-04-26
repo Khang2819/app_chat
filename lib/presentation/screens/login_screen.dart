@@ -1,11 +1,9 @@
-import 'package:app_chat/presentation/blocs/auth/auth_event.dart';
+import 'package:app_chat/presentation/cubits/LoginCubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-import '../blocs/auth/auth_bloc.dart';
-import '../blocs/auth/auth_state.dart';
 import '../widgets/app_loader.dart';
 import '../widgets/app_snackbar.dart';
 import '../widgets/button.dart';
@@ -24,17 +22,17 @@ class LoginScreen extends StatelessWidget {
     return AppLoader.wrap(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: BlocListener<AuthBloc, AuthState>(
+        child: BlocListener<LoginCubit, LoginState>(
           listener: (context, state) {
-            if (state is AuthLoading) {
+            if (state is LoginLoading) {
               AppLoader.show(context);
             } else {
               AppLoader.hide(context);
             }
-            if (state is AuthSuces) {
+            if (state is LoginSuces) {
               AppSnackbar.show(context, message: 'Đăng nhập thành công');
               context.go('/mainScreen');
-            } else if (state is AuthFailure) {
+            } else if (state is LoginFailure) {
               AppSnackbar.show(context, message: 'Đăng nhập không thành công');
             }
           },
@@ -76,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      Text(
+                      const Text(
                         'Xin chào!',
                         style: TextStyle(
                           color: Colors.white,
@@ -85,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Text(
+                      const Text(
                         'Đăng nhập để tiếp tục kết nối và nhắn tin với bạn bè.',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20, color: Colors.white70),
@@ -93,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 30),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
+                        child: const Text(
                           'Email',
                           style: TextStyle(color: Colors.white70, fontSize: 15),
                         ),
@@ -107,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 15),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
+                        child: const Text(
                           'Mật khẩu',
                           style: TextStyle(color: Colors.white54, fontSize: 15),
                         ),
@@ -124,7 +122,7 @@ class LoginScreen extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () => context.push('/forgot'),
-                          child: Text(
+                          child: const Text(
                             'Quên mật khẩu',
                             style: TextStyle(color: Color(0xFF1E5EFF)),
                           ),
@@ -135,11 +133,9 @@ class LoginScreen extends StatelessWidget {
                         text: 'Đăng nhập',
                         color: Color(0xFF1E5EFF),
                         onPressed: () {
-                          context.read<AuthBloc>().add(
-                            LoginWithEmailEvent(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                            ),
+                          context.read<LoginCubit>().login(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
                           );
                         },
                       ),
@@ -151,7 +147,10 @@ class LoginScreen extends StatelessWidget {
                             child: Divider(thickness: 1, color: Colors.white24),
                           ),
                           const SizedBox(width: 10),
-                          Text('Hoặc', style: TextStyle(color: Colors.white54)),
+                          const Text(
+                            'Hoặc',
+                            style: TextStyle(color: Colors.white54),
+                          ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Divider(thickness: 1, color: Colors.white24),
