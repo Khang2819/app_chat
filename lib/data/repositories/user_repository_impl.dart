@@ -1,6 +1,6 @@
 import 'package:app_chat/domain/repositories/user_repository.dart';
 
-import '../../domain/repositories/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 import '../datasources/user_remote_datasource.dart';
 
 class UserRepositoryImpl implements UserRepository {

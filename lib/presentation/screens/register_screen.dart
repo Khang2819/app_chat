@@ -164,6 +164,7 @@ class Register extends StatelessWidget {
                             child: ButtonOutline(
                               text: 'Google',
                               icon: FontAwesomeIcons.google,
+                              onPressed: () {},
                               // color: Colors.white24,
                             ),
                           ),
@@ -172,6 +173,7 @@ class Register extends StatelessWidget {
                             child: ButtonOutline(
                               text: 'Apple',
                               icon: FontAwesomeIcons.apple,
+                              onPressed: () {},
                               // color: Colors.white24,
                             ),
                           ),

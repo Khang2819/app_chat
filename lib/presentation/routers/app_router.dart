@@ -5,7 +5,7 @@ import 'package:app_chat/presentation/blocs/auth/auth_bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../domain/repositories/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 import '../blocs/auth/auth_state.dart';
 import '../screens/add_friend_qr_screen.dart';
 import '../screens/change_password.dart';

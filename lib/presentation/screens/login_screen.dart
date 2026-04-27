@@ -10,9 +10,14 @@ import '../widgets/button.dart';
 import '../widgets/button_outline.dart';
 import '../widgets/textfield.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -31,7 +36,6 @@ class LoginScreen extends StatelessWidget {
             }
             if (state is LoginSuces) {
               AppSnackbar.show(context, message: 'Đăng nhập thành công');
-              context.go('/mainScreen');
             } else if (state is LoginFailure) {
               AppSnackbar.show(context, message: 'Đăng nhập không thành công');
             }
@@ -164,7 +168,11 @@ class LoginScreen extends StatelessWidget {
                             child: ButtonOutline(
                               text: 'Google',
                               icon: FontAwesomeIcons.google,
-                              // color: Colors.white24,
+                              onPressed:
+                                  () =>
+                                      context
+                                          .read<LoginCubit>()
+                                          .loginWithGoogle(),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -172,6 +180,7 @@ class LoginScreen extends StatelessWidget {
                             child: ButtonOutline(
                               text: 'Apple',
                               icon: FontAwesomeIcons.apple,
+                              onPressed: () {},
                               // color: Colors.white24,
                             ),
                           ),

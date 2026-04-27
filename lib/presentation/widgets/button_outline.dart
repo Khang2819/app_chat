@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 class ButtonOutline extends StatelessWidget {
   final String text;
   final IconData icon;
-  const ButtonOutline({super.key, required this.text, required this.icon});
+  final VoidCallback onPressed;
+  const ButtonOutline({
+    super.key,
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,7 @@ class ButtonOutline extends StatelessWidget {
         color: Color(0xFF1A2233),
       ),
       child: TextButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(icon, color: Colors.white54),
         label: Text(
           text,

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app_chat/domain/repositories/user_entity.dart';
+import 'package:app_chat/domain/entities/user_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';

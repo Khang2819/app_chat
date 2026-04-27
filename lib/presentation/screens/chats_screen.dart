@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../domain/entities/chat_entity.dart';
-import '../../domain/repositories/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 import '../blocs/chat/chat_bloc.dart';
 
 class Chats extends StatefulWidget {

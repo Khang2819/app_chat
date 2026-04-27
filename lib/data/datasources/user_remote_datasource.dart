@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../domain/repositories/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 import '../models/users_model.dart';
 
 abstract class UserRemoteDatasource {

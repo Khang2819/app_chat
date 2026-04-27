@@ -117,7 +117,7 @@ class ForgotPassword extends StatelessWidget {
 
                                 const Spacer(),
                                 Center(
-                                  child: Text(
+                                  child: const Text(
                                     'Cần hỗ trợ thêm? ❓',
                                     style: TextStyle(color: Colors.grey),
                                   ),

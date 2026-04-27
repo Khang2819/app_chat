@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/injection_container.dart';
-import '../../domain/repositories/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../blocs/friend/friend_bloc.dart';
 import '../widgets/app_snackbar.dart';
@@ -27,7 +27,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     _fetchUserData();
   }
 
-  // Lấy dữ liệu người dùng thật từ Firebase thông qua Repository
   Future<void> _fetchUserData() async {
     try {
       final data = await getIt<UserRepository>().getUserById(widget.userId);
@@ -53,7 +52,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       listener: (context, state) {
         if (state is FriendActionSuccess) {
           AppSnackbar.show(context, message: state.message);
-          context.pop(); // Quay lại sau khi gửi lời mời thành công
+          context.pop();
         } else if (state is FriendError) {
           AppSnackbar.show(
             context,

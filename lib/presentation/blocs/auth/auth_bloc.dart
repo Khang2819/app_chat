@@ -1,4 +1,4 @@
-import 'package:app_chat/domain/repositories/user_entity.dart';
+import 'package:app_chat/domain/entities/user_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/repositories/auth_repository.dart';

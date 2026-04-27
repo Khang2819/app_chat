@@ -10,8 +10,19 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit({required this.loginUseCase}) : super(LoginInitial());
 
   Future<void> login(String email, String password) async {
+    emit(LoginLoading());
     try {
       await loginUseCase(email, password);
+    } catch (e) {
+      emit(LoginFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    emit(LoginLoading());
+    try {
+      await loginUseCase.repository.signInWithGoogle();
+      emit(const LoginSuces(message: 'Đăng nhập Google thành công'));
     } catch (e) {
       emit(LoginFailure(error: e.toString()));
     }
