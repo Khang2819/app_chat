@@ -1,3 +1,4 @@
+import 'package:app_chat/domain/repositories/user_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/repositories/auth_repository.dart';
@@ -11,7 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.logoutUsecase, required this.authRepository})
     : super(AuthInitial()) {
     on<AuthStatusChanged>((event, emit) async {
-      await emit.forEach(
+      await emit.forEach<UserEntity?>(
         authRepository.user,
         onData:
             (user) =>

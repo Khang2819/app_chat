@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'firebase_options.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
+import 'presentation/blocs/auth/auth_event.dart';
 import 'presentation/blocs/friend/friend_bloc.dart';
 import 'presentation/routers/app_router.dart';
 
@@ -21,7 +22,9 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => getIt<AuthBloc>()),
+        BlocProvider(
+          create: (_) => getIt<AuthBloc>()..add(AuthStatusChanged(null)),
+        ),
         BlocProvider(create: (_) => getIt<LoginCubit>()),
         BlocProvider(create: (_) => getIt<RegisterCubit>()),
         BlocProvider(create: (_) => getIt<HomeBloc>()..add(HomeLoad())),
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'app_chat',
       debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+      routerConfig: AppRouter.createRouter(context.read<AuthBloc>()),
     );
   }
 }

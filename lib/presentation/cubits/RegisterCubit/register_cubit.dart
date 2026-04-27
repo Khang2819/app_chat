@@ -13,7 +13,6 @@ class RegisterCubit extends Cubit<RegisterCubitState> {
   Future<void> register(String fullName, String email, String password) async {
     try {
       await registerUseCase(fullName, email, password);
-      emit(RegisterSuccess(message: 'Đăng kí thành công'));
     } catch (e) {
       emit(RegisterFailure(error: e.toString()));
     }
