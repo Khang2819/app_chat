@@ -49,8 +49,11 @@ class AppRouter {
             state.matchedLocation == '/register' ||
             state.matchedLocation == '/forgot';
 
-        if (auth is AuthInitial || auth is AuthLoading) {
+        if (auth is AuthInitial) {
           return isSplash ? null : '/splash';
+        }
+        if (auth is AuthLoading) {
+          return null;
         }
 
         if (auth is AuthUnauthenticated) {

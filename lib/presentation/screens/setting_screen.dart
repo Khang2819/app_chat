@@ -39,7 +39,6 @@ class Setting extends StatelessWidget {
               if (state is AuthSuces &&
                   state.message == 'Đăng xuất thành công') {
                 AppSnackbar.show(context, message: state.message);
-                context.go('/login');
               } else if (state is AuthFailure) {
                 AppSnackbar.show(
                   context,

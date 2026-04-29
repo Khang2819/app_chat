@@ -108,7 +108,6 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
                   ),
                 ],
 
-                // Hiển thị lời mời cũ hơn nếu có
                 if (olderRequests.isNotEmpty) ...[
                   const SliverToBoxAdapter(
                     child: Padding(

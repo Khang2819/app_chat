@@ -11,6 +11,7 @@ class RegisterCubit extends Cubit<RegisterCubitState> {
     : super(RegisterCubitInitial());
 
   Future<void> register(String fullName, String email, String password) async {
+    emit(RegisterLoading());
     try {
       await registerUseCase(fullName, email, password);
     } catch (e) {

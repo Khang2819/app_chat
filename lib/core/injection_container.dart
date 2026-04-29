@@ -1,4 +1,5 @@
 import 'package:app_chat/domain/repositories/friend_repository.dart';
+import 'package:app_chat/domain/usecases/auth_usecases/google_usecase.dart';
 import 'package:app_chat/presentation/blocs/auth/auth_bloc.dart';
 import 'package:app_chat/presentation/blocs/friend/friend_bloc.dart';
 import 'package:app_chat/presentation/blocs/home/home_bloc.dart';
@@ -32,7 +33,9 @@ void init() {
   getIt.registerFactory(
     () => AuthBloc(logoutUsecase: getIt(), authRepository: getIt()),
   );
-  getIt.registerFactory(() => LoginCubit(loginUseCase: getIt()));
+  getIt.registerFactory(
+    () => LoginCubit(loginUseCase: getIt(), googleUsecase: getIt()),
+  );
   getIt.registerFactory(() => RegisterCubit(registerUseCase: getIt()));
   getIt.registerFactory(() => SearchBloc(userRepository: getIt()));
   getIt.registerFactory(() => HomeBloc(userRepository: getIt()));
@@ -51,6 +54,7 @@ void init() {
 
   //case
   getIt.registerLazySingleton(() => LoginUsecase(getIt()));
+  getIt.registerLazySingleton(() => GoogleUsecase(getIt()));
   getIt.registerLazySingleton(() => RegisterUsecase(getIt()));
   getIt.registerLazySingleton(() => LogoutUsecase(getIt()));
   getIt.registerLazySingleton(() => SendFriendRequestUsecase(getIt()));

@@ -126,16 +126,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   @override
   Future<void> logout() async {
     final uid = _firebaseAuth.currentUser?.uid;
     try {
-      await _firebaseAuth.signOut();
       if (uid != null) {
         await _firestore.collection('users').doc(uid).update({
           'isOnline': false,
         });
       }
+      await _googleSignIn.signOut();
+      await _firebaseAuth.signOut();
     } catch (e) {
       throw Exception('Đã có lỗi xảy ra, vui long thử lại');
     }

@@ -12,6 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.logoutUsecase, required this.authRepository})
     : super(AuthInitial()) {
     on<AuthStatusChanged>((event, emit) async {
+      await Future.delayed(const Duration(seconds: 2));
       await emit.forEach<UserEntity?>(
         authRepository.user,
         onData:
