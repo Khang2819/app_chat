@@ -5,6 +5,7 @@ import 'package:app_chat/presentation/blocs/friend/friend_bloc.dart';
 import 'package:app_chat/presentation/blocs/home/home_bloc.dart';
 import 'package:app_chat/presentation/blocs/my_qr/my_qr_bloc.dart';
 import 'package:app_chat/presentation/blocs/search/search_bloc.dart';
+import 'package:app_chat/presentation/cubits/cubit/forgot_password_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../data/datasources/auth_remote_datasource.dart';
@@ -18,6 +19,7 @@ import '../data/repositories/user_repository_impl.dart';
 import '../domain/repositories/auth_repository.dart';
 import '../domain/repositories/chat_repository.dart';
 import '../domain/repositories/user_repository.dart';
+import '../domain/usecases/auth_usecases/forgot_password_usecase.dart';
 import '../domain/usecases/auth_usecases/login_usecase.dart';
 import '../domain/usecases/auth_usecases/logout_usecase.dart';
 import '../domain/usecases/auth_usecases/register_usecase.dart';
@@ -37,6 +39,9 @@ void init() {
     () => LoginCubit(loginUseCase: getIt(), googleUsecase: getIt()),
   );
   getIt.registerFactory(() => RegisterCubit(registerUseCase: getIt()));
+  getIt.registerFactory(
+    () => ForgotPasswordCubit(forgotpasswordUsecase: getIt()),
+  );
   getIt.registerFactory(() => SearchBloc(userRepository: getIt()));
   getIt.registerFactory(() => HomeBloc(userRepository: getIt()));
   getIt.registerFactory(
@@ -57,6 +62,7 @@ void init() {
   getIt.registerLazySingleton(() => GoogleUsecase(getIt()));
   getIt.registerLazySingleton(() => RegisterUsecase(getIt()));
   getIt.registerLazySingleton(() => LogoutUsecase(getIt()));
+  getIt.registerLazySingleton(() => ForgotpasswordUsecase(getIt()));
   getIt.registerLazySingleton(() => SendFriendRequestUsecase(getIt()));
   getIt.registerLazySingleton(() => AcceptFriendRequestUsecase(getIt()));
   getIt.registerLazySingleton(() => DeleteFriendRequestUsecase(getIt()));

@@ -31,8 +31,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<UserEntity> forgotPassword(String email) async {
-    throw UnimplementedError();
+  Future<void> forgotPassword(String email) async {
+    return await remoteDataSource.forgotPassword(email);
   }
 
   @override

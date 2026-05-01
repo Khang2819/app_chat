@@ -10,6 +10,7 @@ abstract class AuthRemoteDataSource {
   Future<UsersModel> google();
   Future<void> logout();
   Stream<UsersModel?> get user;
+  Future<void> forgotPassword(String email);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -141,6 +142,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await _firebaseAuth.signOut();
     } catch (e) {
       throw Exception('Đã có lỗi xảy ra, vui long thử lại');
+    }
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception(
+        "Không thể gửi email đặt lại mật khẩu. Vui lòng kiểm tra lại email.",
+      );
     }
   }
 }

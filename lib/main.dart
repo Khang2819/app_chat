@@ -5,6 +5,7 @@ import 'package:app_chat/presentation/blocs/my_qr/my_qr_bloc.dart';
 import 'package:app_chat/presentation/blocs/search/search_bloc.dart';
 import 'package:app_chat/presentation/cubits/LoginCubit/login_cubit.dart';
 import 'package:app_chat/presentation/cubits/RegisterCubit/register_cubit.dart';
+import 'package:app_chat/presentation/cubits/cubit/forgot_password_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
         ),
         BlocProvider(create: (_) => getIt<LoginCubit>()),
         BlocProvider(create: (_) => getIt<RegisterCubit>()),
+        BlocProvider(create: (_) => getIt<ForgotPasswordCubit>()),
         BlocProvider(create: (_) => getIt<HomeBloc>()..add(HomeLoad())),
         BlocProvider(create: (_) => getIt<SearchBloc>()),
         BlocProvider(create: (_) => getIt<FriendBloc>()),
