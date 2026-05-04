@@ -1,4 +1,4 @@
-import 'package:app_chat/presentation/cubits/cubit/forgot_password_cubit.dart';
+import 'package:app_chat/presentation/cubits/Forgot_password/forgot_password_cubit.dart';
 import 'package:app_chat/presentation/widgets/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +8,21 @@ import '../widgets/app_snackbar.dart';
 import '../widgets/button.dart';
 import '../widgets/textfield.dart';
 
-class ForgotPassword extends StatelessWidget {
-  ForgotPassword({super.key});
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
+
+  @override
+  State<ForgotPassword> createState() => _ForgotPasswordState();
+}
+
+class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

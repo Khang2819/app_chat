@@ -11,6 +11,11 @@ abstract class AuthRemoteDataSource {
   Future<void> logout();
   Stream<UsersModel?> get user;
   Future<void> forgotPassword(String email);
+  Future<void> changePassword(
+    String email,
+    String oldPassword,
+    String newPassword,
+  );
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -141,7 +146,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
     } catch (e) {
-      throw Exception('Đã có lỗi xảy ra, vui long thử lại');
+      throw Exception('Đã có lỗi xảy ra, vui lòng thử lại');
     }
   }
 
@@ -153,6 +158,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw Exception(
         "Không thể gửi email đặt lại mật khẩu. Vui lòng kiểm tra lại email.",
       );
+    }
+  }
+
+  @override
+  Future<void> changePassword(
+    String email,
+    String oldPassword,
+    String newPassword,
+  ) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: oldPassword,
+      );
+      await user!.reauthenticateWithCredential(credential);
+
+      await user.updatePassword(newPassword);
+    } catch (e) {
+      throw Exception('Vui lòng thử lại');
     }
   }
 }

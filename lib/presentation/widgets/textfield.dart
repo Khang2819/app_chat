@@ -5,12 +5,14 @@ class Textfield extends StatefulWidget {
   final IconData icon;
   final TextEditingController controller;
   final bool isPassword;
+  final ValueChanged<String>? onChanged;
   const Textfield({
     super.key,
     required this.hint,
     required this.icon,
     required this.controller,
     this.isPassword = false,
+    this.onChanged,
   });
 
   @override
@@ -42,6 +44,7 @@ class _TextfieldState extends State<Textfield> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      onChanged: widget.onChanged,
       obscureText: widget.isPassword ? _obscureText : false,
       style: TextStyle(color: Colors.white),
       focusNode: _focusNode,

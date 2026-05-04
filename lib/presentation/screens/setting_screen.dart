@@ -35,7 +35,6 @@ class Setting extends StatelessWidget {
                 return;
               }
               AppLoader.hide(context);
-
               if (state is AuthSuces &&
                   state.message == 'Đăng xuất thành công') {
                 AppSnackbar.show(context, message: state.message);
@@ -212,7 +211,6 @@ class Setting extends StatelessWidget {
     );
   }
 
-  // Widget bổ trợ để gom nhóm các mục cài đặt
   Widget _buildSettingGroup(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
@@ -235,6 +233,7 @@ class Setting extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
+          // ignore: deprecated_member_use
           color: Colors.blue.withOpacity(0.1),
           shape: BoxShape.circle,
         ),

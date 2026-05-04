@@ -1,11 +1,12 @@
 import 'package:app_chat/domain/repositories/friend_repository.dart';
+import 'package:app_chat/domain/usecases/auth_usecases/change_password_usecase.dart';
 import 'package:app_chat/domain/usecases/auth_usecases/google_usecase.dart';
 import 'package:app_chat/presentation/blocs/auth/auth_bloc.dart';
 import 'package:app_chat/presentation/blocs/friend/friend_bloc.dart';
 import 'package:app_chat/presentation/blocs/home/home_bloc.dart';
 import 'package:app_chat/presentation/blocs/my_qr/my_qr_bloc.dart';
 import 'package:app_chat/presentation/blocs/search/search_bloc.dart';
-import 'package:app_chat/presentation/cubits/cubit/forgot_password_cubit.dart';
+import 'package:app_chat/presentation/cubits/Forgot_password/forgot_password_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../data/datasources/auth_remote_datasource.dart';
@@ -28,6 +29,7 @@ import '../domain/usecases/friend_usecases.dart';
 import '../presentation/blocs/chat/chat_bloc.dart';
 import '../presentation/cubits/LoginCubit/login_cubit.dart';
 import '../presentation/cubits/RegisterCubit/register_cubit.dart';
+import '../presentation/cubits/cubit/change_password_cubit.dart';
 
 final getIt = GetIt.instance;
 void init() {
@@ -56,6 +58,9 @@ void init() {
   getIt.registerFactory(
     () => ChatBloc(getChatUsecase: getIt(), sendChatUsecase: getIt()),
   );
+  getIt.registerFactory(
+    () => ChangePasswordCubit(changePasswordUsecase: getIt()),
+  );
 
   //case
   getIt.registerLazySingleton(() => LoginUsecase(getIt()));
@@ -69,6 +74,7 @@ void init() {
   getIt.registerLazySingleton(() => GetIncomingRequestsUsecase(getIt()));
   getIt.registerLazySingleton(() => GetChatUsecase(getIt()));
   getIt.registerLazySingleton(() => SendChatUsecase(getIt()));
+  getIt.registerLazySingleton(() => ChangePasswordUsecase(getIt()));
 
   //Repositories
   getIt.registerLazySingleton<AuthRepository>(

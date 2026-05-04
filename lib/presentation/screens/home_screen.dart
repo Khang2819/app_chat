@@ -37,7 +37,6 @@ class Home extends StatelessWidget {
                 if (state is HomeLoaded) {
                   return Column(
                     children: [
-                      // Header Section
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
@@ -139,7 +138,6 @@ class Home extends StatelessWidget {
                               ),
 
                               const SizedBox(height: 20),
-
                               Expanded(
                                 child: TabBarView(
                                   children: [

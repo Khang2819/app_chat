@@ -147,9 +147,9 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
       children: [
         Expanded(
           child: _headerCard(
-            'PENDING',
+            'Chưa giải quyết',
             '$count',
-            'New requests',
+            'Yêu cầu mới',
             const Color(0xFF1E1E1E),
             const Color(0xFF1877F2),
           ),
@@ -157,9 +157,9 @@ class _FriendrequestscreenState extends State<Friendrequestscreen> {
         const SizedBox(width: 12),
         Expanded(
           child: _headerCard(
-            'DISCOVERY',
+            'Khám phá',
             '',
-            'Find more friends',
+            'Tìm thêm bạn bè',
             const Color(0xFF1877F2),
             Colors.white,
             isIcon: true,
