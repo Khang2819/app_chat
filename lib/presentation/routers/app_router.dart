@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../domain/entities/user_entity.dart';
 import '../blocs/auth/auth_state.dart';
 import '../screens/add_friend_qr_screen.dart';
+import '../screens/change_name_avatar.dart';
 import '../screens/change_password.dart';
 import '../screens/chats_screen.dart';
 import '../screens/directory.dart';
@@ -39,7 +40,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 class AppRouter {
   static GoRouter createRouter(AuthBloc authBloc) {
     return GoRouter(
-      initialLocation: '/splash',
+      initialLocation: '/change',
       refreshListenable: GoRouterRefreshStream(authBloc.stream),
       redirect: (context, state) {
         final auth = authBloc.state;
@@ -98,6 +99,11 @@ class AppRouter {
         GoRoute(
           path: '/qr_screen',
           builder: (context, state) => AddFriendQrScreen(),
+        ),
+
+        GoRoute(
+          path: '/change',
+          builder: (context, state) => ChangeNameAvatar(),
         ),
 
         GoRoute(path: '/qr_scan', builder: (context, state) => QrScanScreen()),

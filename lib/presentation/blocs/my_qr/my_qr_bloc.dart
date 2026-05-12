@@ -15,6 +15,7 @@ class MyQrBloc extends Bloc<MyQrEvent, MyQrState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   MyQrBloc({required this.userRepository}) : super(MyQrInitial()) {
     on<LoadMyQrInfo>(_onLoadMyQrInfo);
+    on<ClearMyQr>(_onClearMyQr);
   }
 
   FutureOr<void> _onLoadMyQrInfo(
@@ -33,5 +34,9 @@ class MyQrBloc extends Bloc<MyQrEvent, MyQrState> {
     } catch (e) {
       emit(MyQrError(e.toString()));
     }
+  }
+
+  FutureOr<void> _onClearMyQr(ClearMyQr event, Emitter<MyQrState> emit) async {
+    emit(MyQrInitial());
   }
 }

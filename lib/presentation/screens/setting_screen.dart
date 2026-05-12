@@ -165,6 +165,12 @@ class Setting extends StatelessWidget {
                             subtitle: 'Âm thanh, tin nhắn',
                             onTap: () {},
                           ),
+                          _buildListTile(
+                            icon: Icons.edit,
+                            title: 'Chỉnh sửa thông tin',
+                            subtitle: 'Thay đổi avatar và tên',
+                            onTap: () => context.push('/change'),
+                          ),
                         ]),
                         const SizedBox(height: 25),
                         const Text(
@@ -195,6 +201,7 @@ class Setting extends StatelessWidget {
                               content: 'Bạn có chắc chắn muốn đăng xuất?',
                             );
                             if (confirm == true && context.mounted) {
+                              context.read<MyQrBloc>().add(ClearMyQr());
                               context.read<AuthBloc>().add(Logout());
                             }
                           },

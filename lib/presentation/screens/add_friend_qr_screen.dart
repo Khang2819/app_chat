@@ -27,7 +27,7 @@ class AddFriendQrScreen extends StatelessWidget {
           },
           icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
-        title: Text(
+        title: const Text(
           'Mã QR của tôi',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -38,13 +38,19 @@ class AddFriendQrScreen extends StatelessWidget {
           if (state is MyQrLoading) {
             return const Center(child: CircularProgressIndicator());
           }
+          if (state is MyQrInitial) {
+            context.read<MyQrBloc>().add(LoadMyQrInfo());
+            return const Center(child: CircularProgressIndicator());
+          }
           if (state is MyQrLoaded) {
             final user = state.user;
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Center(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
+                      width: double.infinity,
                       padding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.08,
                         vertical: 16,
@@ -165,7 +171,7 @@ class AddFriendQrScreen extends StatelessWidget {
                                         color: Color(0xFF1E5EFF),
                                       ),
                                       SizedBox(width: 8),
-                                      Text(
+                                      const Text(
                                         'Chia sẻ mã',
                                         style: TextStyle(
                                           color: Colors.white,
@@ -196,7 +202,7 @@ class AddFriendQrScreen extends StatelessWidget {
                                         color: Colors.green,
                                       ),
                                       SizedBox(width: 8),
-                                      Text(
+                                      const Text(
                                         'Lưu ảnh',
                                         style: TextStyle(
                                           color: Colors.white,
@@ -225,7 +231,7 @@ class AddFriendQrScreen extends StatelessWidget {
                           context.push('/qr_scan');
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Color(0xFF1E5EFF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
@@ -233,12 +239,17 @@ class AddFriendQrScreen extends StatelessWidget {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.qr_code_scanner, size: 24),
+                            Icon(
+                              Icons.qr_code_scanner,
+                              size: 24,
+                              color: Colors.white,
+                            ),
                             SizedBox(width: 8),
                             Text(
                               'Quét mã QR của người khác',
                               style: TextStyle(
                                 fontSize: 16,
+                                color: Colors.white,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

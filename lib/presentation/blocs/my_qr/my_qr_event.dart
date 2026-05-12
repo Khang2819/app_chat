@@ -8,3 +8,5 @@ sealed class MyQrEvent extends Equatable {
 }
 
 class LoadMyQrInfo extends MyQrEvent {}
+
+class ClearMyQr extends MyQrEvent {}
